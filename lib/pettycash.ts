@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { AuditEventType, Prisma } from "@prisma/client";
-
+import { RequestStatus } from "@prisma/client";
 /**
  * Concurrency-safe voucher number issuance.
  *
@@ -62,8 +62,16 @@ export async function writeAudit(params: {
   });
 }
 
-const APPROVED_STATUSES = ["FINALLY_APPROVED", "PAID", "SETTLED"] as const;
-const PENDING_STATUSES = ["SUBMITTED", "APPROVED_BY_DD"] as const;
+const APPROVED_STATUSES: RequestStatus[] = [
+  RequestStatus.FINALLY_APPROVED,
+  RequestStatus.PAID,
+  RequestStatus.SETTLED,
+];
+
+const PENDING_STATUSES: RequestStatus[] = [
+  RequestStatus.SUBMITTED,
+  RequestStatus.APPROVED_BY_DD,
+];
 
 export async function totalAllocation(fiscalYearId: string): Promise<number> {
   const fy = await prisma.fiscalYear.findUniqueOrThrow({ where: { id: fiscalYearId } });
@@ -73,7 +81,7 @@ export async function totalAllocation(fiscalYearId: string): Promise<number> {
 
 export async function approvedExpenditure(fiscalYearId: string): Promise<number> {
   const agg = await prisma.request.aggregate({
-    where: { fiscalYearId, status: { in: APPROVED_STATUSES as unknown as string[] } },
+    where: { fiscalYearId, status: { in: APPROVED_STATUSES } },
     _sum: { requestedAmount: true },
   });
   return Number(agg._sum.requestedAmount ?? 0);
@@ -81,7 +89,7 @@ export async function approvedExpenditure(fiscalYearId: string): Promise<number>
 
 export async function pendingCommitment(fiscalYearId: string): Promise<number> {
   const agg = await prisma.request.aggregate({
-    where: { fiscalYearId, status: { in: PENDING_STATUSES as unknown as string[] } },
+    where: { fiscalYearId, status: { in: PENDING_STATUSES } },
     _sum: { requestedAmount: true },
   });
   return Number(agg._sum.requestedAmount ?? 0);
@@ -97,7 +105,7 @@ export async function availableBalance(fiscalYearId: string): Promise<number> {
 
 export async function budgetHeadSpent(budgetHeadId: string, fiscalYearId: string): Promise<number> {
   const agg = await prisma.request.aggregate({
-    where: { budgetHeadId, fiscalYearId, status: { in: APPROVED_STATUSES as unknown as string[] } },
+    where: { budgetHeadId, fiscalYearId, status: { in: APPROVED_STATUSES } },
     _sum: { requestedAmount: true },
   });
   return Number(agg._sum.requestedAmount ?? 0);
