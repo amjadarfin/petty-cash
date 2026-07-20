@@ -74,7 +74,7 @@ export async function submitRequestAction(formData: FormData) {
       expenseDate,
       vendorPayee,
       purpose,
-      budgetHeadId: budgetHeadId || undefined,
+      budgetHeadId: budgetHeadId,
       requestedAmount: requestedAmount || 0,
       exceptionReason: exceptionReason || undefined,
       evidenceStatus: file && file.size > 0 ? "COMPLETE" : "EXCEPTION_REQUESTED",
