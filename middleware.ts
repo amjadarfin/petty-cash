@@ -18,7 +18,9 @@ export default auth((req) => {
     pathname.startsWith("/login") ||
     pathname.startsWith("/api/auth");
 
-  if (isPublic) return NextResponse.next();
+  if (isPublic) {
+    return NextResponse.next();
+  }
 
   if (!req.auth?.user) {
     const url = new URL("/login", req.url);
@@ -26,13 +28,14 @@ export default auth((req) => {
     return NextResponse.redirect(url);
   }
 
-  const role = (req.auth.user as { role?: string }).role;
+  const role = (req.auth.user as any).role;
 
   for (const prefix of Object.keys(ROLE_PREFIXES)) {
     if (pathname.startsWith(prefix)) {
-      const allowed = ROLE_PREFIXES[prefix];
-      if (!role || !allowed.includes(role)) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+      if (!ROLE_PREFIXES[prefix].includes(role)) {
+        return NextResponse.redirect(
+          new URL("/dashboard", req.url)
+        );
       }
     }
   }
@@ -41,5 +44,7 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };
