@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FBF3EC;
+  --foreground: #4A3F3B;
+  --heading: #C2622E;
+  --navy: #EFA46B;
+  --navy-2: #E4915A;
+  --slate: #A89A92;
+  --gold: #E8935B;
+  --gold-soft: #FBE4D0;
+  --teal: #4FAE94;
+  --teal-soft: #DCF0E8;
+  --green: #3E9A67;
+  --green-soft: #D6F0DF;
+  --amber: #C99A2E;
+  --amber-soft: #FBE8B8;
+  --red: #C15464;
+  --red-soft: #F8D6DC;
+  --blue: #6B7FD1;
+  --blue-soft: #E1E1F7;
+  --line: #EFE1D5;
+  --paper-2: #FFFFFF;
+  --paper-3: #FBF0E6;
+  --input-bg: #FFFBF7;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+h1, h2, h3 { font-family: Georgia, "Iowan Old Style", serif; }
+
+.voucher { font-family: "Courier New", ui-monospace, monospace; font-weight: 700; color: var(--heading); }
+
+.status-pill {
+  display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 11px;
+  font-weight: 700; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap;
+}
+.st-DRAFT { background: #EDE6DF; color: #8A7A6E; }
+.st-SUBMITTED { background: var(--blue-soft); color: #5061B8; }
+.st-APPROVED_BY_DD { background: var(--gold-soft); color: #B5652E; }
+.st-FINALLY_APPROVED { background: var(--teal-soft); color: #2F7D68; }
+.st-PAID { background: var(--green-soft); color: #2F7D52; }
+.st-SETTLED { background: #C7E9D4; color: #256B45; }
+.st-RETURNED_BY_DD, .st-RETURNED_BY_DIRECTOR { background: var(--amber-soft); color: #8A6A1E; }
+.st-REJECTED_BY_DD, .st-REJECTED_BY_DIRECTOR { background: var(--red-soft); color: #A83A4A; }
+.st-CANCELLED { background: #E8E2DC; color: #8A8078; }
+
+.card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(196, 150, 100, 0.08); }
+.btn { border: 1px solid var(--navy); background: var(--navy); color: #fff; padding: 9px 20px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-block; }
+.btn:hover { background: var(--navy-2); border-color: var(--navy-2); }
+.btn-gold { background: var(--gold); border-color: var(--gold); color: #fff; }
+.btn-gold:hover { background: #D97F45; border-color: #D97F45; }
+.btn-outline { background: transparent; color: var(--heading); border-color: var(--line); }
+.btn-outline:hover { background: var(--paper-3); }
+.btn-green { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-red { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-small { padding: 6px 14px; font-size: 11.5px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+table { width: 100%; border-collapse: collapse; font-size: 12.8px; }
+th { text-align: left; background: var(--paper-3); color: var(--heading); padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid var(--line); }
+th:first-child { border-top-left-radius: 10px; }
+th:last-child { border-top-right-radius: 10px; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--foreground); }
+tr:hover td { background: var(--paper-3); }
+
+input, select, textarea {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--input-bg); font-size: 13.5px; color: var(--foreground);
+}
+input::placeholder, textarea::placeholder { color: #C4B5A9; }
+label { display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--slate); margin-bottom: 5px; font-weight: 600; }
+
+.banner { padding: 11px 16px; border-radius: 12px; font-size: 12.5px; margin-bottom: 16px; border: 1px solid; }
+.banner-warn { background: var(--gold-soft); border-color: var(--gold); color: #B5652E; }
+.banner-info { background: var(--blue-soft); border-color: var(--blue); color: #4A5BB0; }
+.banner-err { background: var(--red-soft); border-color: var(--red); color: #A83A4A; }
+
+.empty { padding: 34px 10px; text-align: center; color: var(--slate); border: 1px dashed var(--line); border-radius: 14px; background: var(--paper-2); font-size: 13px; }
+
+.nav-badge {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 19px; height: 19px;
+  padding: 0 5px; border-radius: 10px; background: var(--red); color: #fff; font-size: 10.5px;
+  font-weight: 700; line-height: 1; animation: badge-pulse 1.8s ease-in-out infinite;
+}
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(193, 84, 100, 0.45); }
+  50% { box-shadow: 0 0 0 5px rgba(193, 84, 100, 0); }
+}
