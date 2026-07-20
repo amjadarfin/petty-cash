@@ -1,5 +1,8 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
+import authConfig from "@/lib/auth.config";
 import { NextResponse } from "next/server";
+
+const { auth } = NextAuth(authConfig);
 
 const ROLE_PREFIXES: Record<string, string[]> = {
   "/approvals/dd": ["DEPUTY_DIRECTOR", "SYSTEM_OWNER"],
@@ -10,7 +13,11 @@ const ROLE_PREFIXES: Record<string, string[]> = {
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const isPublic = pathname.startsWith("/login") || pathname.startsWith("/api/auth");
+
+  const isPublic =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/api/auth");
+
   if (isPublic) return NextResponse.next();
 
   if (!req.auth?.user) {
@@ -20,6 +27,7 @@ export default auth((req) => {
   }
 
   const role = (req.auth.user as { role?: string }).role;
+
   for (const prefix of Object.keys(ROLE_PREFIXES)) {
     if (pathname.startsWith(prefix)) {
       const allowed = ROLE_PREFIXES[prefix];
@@ -28,6 +36,7 @@ export default auth((req) => {
       }
     }
   }
+
   return NextResponse.next();
 });
 
