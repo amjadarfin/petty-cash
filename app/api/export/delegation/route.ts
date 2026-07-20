@@ -6,10 +6,8 @@ import { NextResponse } from "next/server";
 import { ApprovalStage, Role } from "@prisma/client";
 
 const roleToStage: Partial<Record<Role, ApprovalStage>> = {
-  SECTION_HEAD: ApprovalStage.SECTION_HEAD,
-  DD: ApprovalStage.DD,
+  DEPUTY_DIRECTOR: ApprovalStage.DEPUTY_DIRECTOR,
   DIRECTOR: ApprovalStage.DIRECTOR,
-  FINANCE: ApprovalStage.FINANCE,
 };
 export async function GET() {
   const session = await auth();
@@ -27,7 +25,12 @@ export async function GET() {
       if (c.backupApproverId && c.delegationStart && c.delegationEnd) {
         const stage = roleToStage[c.roleName];
 
-if (stage) {
+if (
+  stage &&
+  c.backupApproverId &&
+  c.delegationStart &&
+  c.delegationEnd
+) {
   itemsDecided = await prisma.approvalAction.count({
     where: {
       actorId: c.backupApproverId,
