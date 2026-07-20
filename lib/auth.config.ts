@@ -35,12 +35,12 @@ export default {
         if (!valid) return null;
 
         return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          department: user.department,
-        };
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  department: user.department ?? undefined,
+};
       },
     }),
   ],
