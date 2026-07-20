@@ -3,7 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { activeFiscalYear } from "@/lib/pettycash";
 import { csvResponse, reportMetaLines } from "@/lib/csv";
 import { NextResponse } from "next/server";
+import { ApprovalStage, Role } from "@prisma/client";
 
+const roleToStage: Partial<Record<Role, ApprovalStage>> = {
+  SECTION_HEAD: ApprovalStage.SECTION_HEAD,
+  DD: ApprovalStage.DD,
+  DIRECTOR: ApprovalStage.DIRECTOR,
+  FINANCE: ApprovalStage.FINANCE,
+};
 export async function GET() {
   const session = await auth();
   if (!session?.user) return new NextResponse("Unauthorized", { status: 401 });
@@ -18,9 +25,20 @@ export async function GET() {
     configs.map(async (c) => {
       let itemsDecided = 0;
       if (c.backupApproverId && c.delegationStart && c.delegationEnd) {
-        itemsDecided = await prisma.approvalAction.count({
-          where: { actorId: c.backupApproverId, stage: c.roleName, actionDate: { gte: c.delegationStart, lte: c.delegationEnd } },
-        });
+        const stage = roleToStage[c.roleName];
+
+if (stage) {
+  itemsDecided = await prisma.approvalAction.count({
+    where: {
+      actorId: c.backupApproverId,
+      stage,
+      actionDate: {
+        gte: c.delegationStart,
+        lte: c.delegationEnd,
+      },
+    },
+  });
+}
       }
       return [
         c.roleName.replace(/_/g, " "),
