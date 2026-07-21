@@ -58,7 +58,7 @@ export default async function LoginPage({
         </form>
 
         <p style={{ color: "var(--slate)", fontSize: 11, marginTop: 16 }}>
-          After running the seed script, sign in with any seeded email (e.g. <code>nadia@example.gov</code>) and password <code>Passw0rd!</code> — see the README.
+         
         </p>
       </div>
     </div>
